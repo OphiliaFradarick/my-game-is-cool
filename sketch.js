@@ -29,10 +29,10 @@ function setup() {
 
   playbutton = createSprite(windowWidth / 2, windowHeight / 2 + 100, 20, 20)
   playbutton.addImage(playbuttonimg)
-  playbutton.visible = false
+  playbutton.visible = false;
   playbutton.scale = 0.35
 
-  
+
 
   meteorpack = new Group()
 
@@ -45,25 +45,24 @@ function setup() {
 function draw() {
   background("grey")
 
-
   drawSprites()
   fill("purple")
-  text("score: " + score,windowWidth-200,50)
+  text("score: " + score, windowWidth - 200, 50)
+
+  //------------------------------START------------------------------------------------
 
   if (gameState === "start") {
     //background(outerspacebackground)
     playbutton.visible = true
+
+    //------------------------------------------------LEVEL 1 condition------------------------------------------------
     if (mousePressedOver(playbutton)) {
       gameState = "Level 1"
-
-
-
-
     }
-
-
-
   }
+
+  //------------------------------------------------LEVEL 1------------------------------------------------
+
   if (gameState === "Level 1") {
     //background(outerspacebackground)
 
@@ -71,58 +70,60 @@ function draw() {
       laserroulette()
     }
 
-    playerplanes.visible = true
-    playbutton.visible = false
-    enemyplanes.visible = false
+    playerplanes.visible = true;
+    playbutton.visible = false;
 
     meteorshower()
 
     playerplanes.x = World.mouseX
     playerplanes.y = World.mouseY
 
-
-    if(score >= 100){
-      gameState = "Level 2"
-
-    }
-
-    
-    if (meteorpack.isTouching(playerplanes)) {
-      gameState = "Game Over"
-    }
-
     if (laserspewpew.isTouching(meteorpack)) {
       meteorpack[0].destroy()
       laserspewpew[0].lifetime = 0
-      
       score += 27
-
     }
 
     if (laserspewpew.isTouching(badplanes)) {
       badplanes[0].destroy()
       laserspewpew[0].lifetime = 0
-      
-      score += 69
+      score += 6;
+    }
 
+
+    //------------------------------------------------LEVEL 2 condition------------------------------------------------
+    if (score >= 100) {
+      gameState = "Level2"
+    }
+
+    //------------------------------------------------Game Over condition------------------------------------------------  
+    if (meteorpack.isTouching(playerplanes)) {
+      gameState = "Game Over"
     }
 
   }
 
-  if(gameState === "Level 2"){
+  //------------------------------------------------LEVEL 2 ------------------------------------------------
+
+  if (gameState === "Level2") {
+
     textSize(50)
     stroke("Teal")
     strokeWeight(5)
-    text("Level 2",windowWidth/3 - 100,windowHeight - 100)
-    
-    meteorpack.destroyEach()
-    
+    text("Level 2", windowWidth / 3 - 100, windowHeight - 100);
+
+    meteorshower();
+    meteors.visible = false;
+    meteorpack.destroyEach();
+
     playerplanes.x = World.mouseX
     playerplanes.y = World.mouseY
 
-    enemyplanesarehere()
-    
+    enemyplanesarehere();
+
   }
+
+  //------------------------------------------------Game Over------------------------------------------------
 
   if (gameState == "Game Over") {
     playerplanes.destroy()
@@ -131,9 +132,7 @@ function draw() {
     textSize(75)
     stroke("Teal")
     strokeWeight(5)
-    text("Game Over, bozo.",windowWidth/2 - 300,windowHeight/2 - 100)
-    
-
+    text("Game Over, bozo.", windowWidth / 2 - 300, windowHeight / 2 - 100);
   }
 }
 
@@ -163,12 +162,7 @@ function laserroulette() {
 
 }
 
-
-
-  
- 
-
-function enemyplanesarehere(){
+function enemyplanesarehere() {
   if (frameCount % 35 === 0) {
     enemyplanes = createSprite(1000, windowHeight / 2, 30, 30)
     enemyplanes.y = random(20, windowHeight - 75)
